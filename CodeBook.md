@@ -51,3 +51,7 @@ To set activity descriptive names to original dataset, the script merge ```datas
 
 Using a for loop (over i variable), rename columns replacing abbreviations. I use ```names``` as temp variable for column names and store result in ```named``` data frame.
 
+Finally, calculate means by activity and subject.
+
+* ```temp``` used for storage data withouth activity description names
+* ```tidyMeans``` contains results with added column for activity description names

@@ -121,3 +121,19 @@ named <- rename(named, ActivityName = ActName, ActivityId = ActId)
 # 5. Creates a second, independent tidy data set with the average of each 
 #    variable for each activity and each subject. 
 ################################################################################
+
+# Create a temp variable (without Activity Name column)
+
+temp <- named[,names(named) != 'ActivityName']
+
+# Calculate means group by ActivityId and SubjectId
+
+tidyMeans <- aggregate(temp[,names(temp) != c('ActivityId','SubjectId')], by=list(ActivityId=temp$ActivityId,SubjectId = temp$SubjectId),mean)
+
+# Add Activity names column
+
+tidyMeans <- merge(tidyMeans,activity_labels,by.x = "ActivityId", by.y = "ActId", all.x = T)
+
+# Write data to file
+
+write.table(tidyMeans, './tidyData.txt',row.names=FALSE)
