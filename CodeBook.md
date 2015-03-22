@@ -48,3 +48,6 @@ Once we have a unique dataset, we select only columns with means and std deviati
 To set activity descriptive names to original dataset, the script merge ```dataset``` with ```activity_labels``` using ```ActId``` adding a new column ```ActName``` to resulting dataset.
 
 * ```named``` contains original dataset with an additional column with descriptive activity names.
+
+Using a for loop (over i variable), rename columns replacing abbreviations. I use ```names``` as temp variable for column names and store result in ```named``` data frame.
+

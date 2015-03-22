@@ -8,11 +8,11 @@
 #   downloaded from 
 #   https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
 #
-#   1. Merge the training and the test sets to create one data set.
-#   2. Extract only the measurements on the mean and standard deviation 
-#      for each measurement. 
-#   3. Use descriptive activity names to name the activities in the data set
-#   4. Appropriately label the data set with descriptive activity names. 
+#   1. Merges the training and the test sets to create one data set.
+#   2. Extracts only the measurements on the mean and standard deviation for 
+#      each measurement.  
+#   3. Uses descriptive activity names to name the activities in the data set
+#   4. Appropriately labels the data set with descriptive variable names.  
 #   5. Creates a second, independent tidy data set with the average of each 
 #      variable for each activity and each subject. 
 #
@@ -73,10 +73,10 @@ mean_std <- dataset[,cols]
 # 3. Use descriptive activity names to name the activities in the data set
 ################################################################################
 
-# Add a column ActName merging original dataset with activiti labels using
-# activity ID
+# Add a column ActName merging result dataset (mean_std) with activity labels
+# using activity ID as join column
 
-named <- merge(dataset, activity_labels, by.x = "ActId", by.y = "ActId", all.x = T)
+named <- merge(mean_std, activity_labels, by.x = "ActId", by.y = "ActId", all.x = T)
 
 
 
@@ -84,7 +84,38 @@ named <- merge(dataset, activity_labels, by.x = "ActId", by.y = "ActId", all.x =
 # 4. Appropriately label the data set with descriptive activity names. 
 ################################################################################
 
+# get col names
+names <- colnames(named)
 
+# for each column apply some replacements
+for (i in 1:length(names)) {
+    # Acc - Accelerator
+    names[i] <- gsub("Acc", "Accelerator", names[i])
+    # Sometimes body is repeated
+    names[i] <- gsub("Body|BodyBody", "Body", names[i])
+    # Mag - Magnitude
+    names[i] <- gsub("Mag","Magnitude", names[i])
+    # Capitalize mean
+    names[i] <- gsub("mean", "Mean", names[i])
+    # std - Standard Deviation
+    names[i] <- gsub("std", "StandardDeviation", names[i])
+    # Gyro - Gyroscope
+    names[i] <- gsub("Gyro", "Gyroscope", names[i])
+    # Delete dots
+    names[i] <- gsub("\\.", "", names[i])
+    # t at first character means Time domain
+    names[i] <- gsub("^(t)", "Time", names[i])
+    # f at first character means Frequency domain (Fast Fourier Transform)
+    names[i] <- gsub("^(f)", "Frequency", names[i])
+}
+
+# Apply new column names
+colnames(named) <- names
+
+# Rename some cols manually using dplyr library
+library(dplyr)
+
+named <- rename(named, ActivityName = ActName, ActivityId = ActId)
 
 ################################################################################
 # 5. Creates a second, independent tidy data set with the average of each 
