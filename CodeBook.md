@@ -45,3 +45,6 @@ Once we have a unique dataset, we select only columns with means and std deviati
 * ```cols``` contains positions of columns to select
 * ```mean_std``` stores subsets of data from original dataset
 
+To set activity descriptive names to original dataset, the script merge ```dataset``` with ```activity_labels``` using ```ActId``` adding a new column ```ActName``` to resulting dataset.
+
+* ```named``` contains original dataset with an additional column with descriptive activity names.

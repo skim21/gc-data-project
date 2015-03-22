@@ -40,6 +40,7 @@ ytest <- read.table("dataset/test/y_test.txt", header = F, col.names = c("ActId"
 stest <- read.table("dataset/test/subject_test.txt", header = F, col.names = c("SubjectId"))
 
 
+
 ################################################################################
 # 1. Merge the training and the test sets to create one data set.
 ################################################################################
@@ -54,7 +55,11 @@ test <- cbind(stest, ytest, xtest)
 dataset <- rbind(train, test)
 
 
-# 2. Extract only the measurements on the mean and standard deviation for each measurement.
+
+################################################################################
+# 2. Extract only the measurements on the mean and standard deviation for
+#    each measurement.
+################################################################################
 
 # Obtain cols positions of IDs, mean and std data
 # and select this data from dataset
@@ -62,6 +67,26 @@ dataset <- rbind(train, test)
 cols <- grep("ActId|SubjectId|(mean|std)\\.", colnames(dataset))
 mean_std <- dataset[,cols]
 
+
+
+################################################################################
 # 3. Use descriptive activity names to name the activities in the data set
+################################################################################
+
+# Add a column ActName merging original dataset with activiti labels using
+# activity ID
+
+named <- merge(dataset, activity_labels, by.x = "ActId", by.y = "ActId", all.x = T)
+
+
+
+################################################################################
 # 4. Appropriately label the data set with descriptive activity names. 
-# 5. Creates a second, independent tidy data set with the average of each variable for each activity and each subject. 
+################################################################################
+
+
+
+################################################################################
+# 5. Creates a second, independent tidy data set with the average of each 
+#    variable for each activity and each subject. 
+################################################################################
